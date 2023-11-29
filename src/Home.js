@@ -13,6 +13,9 @@ function Home() {
       <div className="text-center text-2xl pt-4">
         Become the next Qwizard champion!
       </div>
+      <div className="text-center text-1xl pt-4">
+        Sign up for an account to save settings and high scores or play as a guest.
+      </div>
       <div className="text-center pt-4">
       <a
           href="/play"

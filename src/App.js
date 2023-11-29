@@ -1,11 +1,15 @@
-import logo from "./logo.svg";
-import "./App.css";
+import "./Styles.css";
 import Home from "./Home";
 import Leaderboard from "./Leaderboard";
 import Navbar from "./Navbar";
 import Play from "./Play";
 import Footer from "./Footer";
-import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import SignUp from "./SignUp";
 
 function App() {
@@ -21,7 +25,7 @@ function App() {
         </Routes>
       </Router>
       <div>
-      <Footer />
+        <Footer />
       </div>
     </div>
   );

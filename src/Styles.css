@@ -1,0 +1,291 @@
+* {
+    font-size: 62, 5%;
+    box-sizing: border-box;
+    margin: 0;
+  }
+/*------------------------------ main overall styles -----------------------------*/
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*--------------------------- Button styles(affects all <buttons>) --------------------------*/
+button {
+    margin: 10px;
+    font-family: inherit;
+    font-size: 18px;
+    background: linear-gradient(to bottom, #4dc7d9 0%,#66a6ff 100%);
+    color: white;
+    padding: 0.8em 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+  }
+  
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+button:active {
+    transform: scale(0.95);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+button span {
+    display: block;
+    margin-left: 0.4em;
+    transition: all 0.3s;
+  }
+ /*------------------------------ Leaderboard styles -----------------------------*/
+.leaderboard-container {
+  font-size: 62.5%;
+  box-sizing: border-box;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard-container body {
+  height: 100%;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard-container .main {
+  margin: 100px;
+  width: 40rem;
+  height: 43rem;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Added this line to center the content */
+  border-radius: 0.5rem;
+}
+
+.leaderboard-container #header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.5rem 2rem;
+}
+
+.leaderboard-container .share {
+  width: 4.5rem;
+  height: 3rem;
+  background-color: #f55e77;
+  border: 0;
+  border-bottom: 0.2rem solid #c0506a;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+/*------------------------
+.share:active {
+  border-bottom: 0;
+}
+
+.share i {
+  color: #fff;
+  font-size: 2rem;
+}
+--------------- Isn't being used currently */
+
+.leaderboard-container h1 {
+  font-family: "Rubik", sans-serif;
+  font-size: 1.7rem;
+  color: #141a39;
+  text-transform: uppercase;
+  cursor: default;
+}
+
+.leaderboard-container #leaderboard {
+  width: 100%;
+  position: relative;
+}
+
+.leaderboard-container table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #141a39;
+  cursor: default;
+}
+
+.leaderboard-container tr {
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.2rem;
+}
+
+.leaderboard-container tr:not(:first-child):hover {
+  background-color: #fff;
+  transform: scale(1.1);
+  -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.leaderboard-container tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.leaderboard-container tr:nth-child(1) {
+  color: #fff;
+}
+
+.leaderboard-container td {
+  height: 5rem;
+  font-family: "Rubik", sans-serif;
+  font-size: 1.4rem;
+  padding: 1rem 2rem;
+  position: relative;
+}
+
+.leaderboard-container .number {
+  width: 1rem;
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: left;
+}
+
+.leaderboard-container .name {
+  text-align: left;
+  font-size: 1.2rem;
+}
+
+.leaderboard-container .points {
+  font-weight: bold;
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.leaderboard-container .points:first-child {
+  width: 10rem;
+}
+
+.leaderboard-container .gold-medal {
+  height: 3rem;
+  margin-left: 1.5rem;
+}
+
+.leaderboard-container .ribbon {
+  width: 42rem;
+  height: 5.5rem;
+  top: -0.5rem;
+  background-color: #5c5be5;
+  position: absolute;
+  left: -1rem;
+  -webkit-box-shadow: 0px 15px 11px -6px #000000;
+  box-shadow: 0px 15px 11px -6px #4b4a4a;
+}
+
+.leaderboard-container .ribbon::before {
+  content: "";
+  height: 1.5rem;
+  width: 1.5rem;
+  bottom: -0.8rem;
+  left: 0.35rem;
+  transform: rotate(45deg);
+  background-color: #5c5be5;
+  position: absolute;
+  z-index: -1;
+}
+
+.leaderboard-container .ribbon::after {
+  content: "";
+  height: 1.5rem;
+  width: 1.5rem;
+  bottom: -0.8rem;
+  right: 0.35rem;
+  transform: rotate(45deg);
+  background-color: #5c5be5;
+  position: absolute;
+  z-index: -1;
+}
+
+.leaderboard-container #buttons {
+  width: 100%;
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.leaderboard-container .leaderboardbuttons {
+  width: 11rem;
+  height: 4rem;
+  font-family: "Rubik", sans-serif;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.leaderboard-container .leaderboardbuttons:hover {
+  border: 0.1rem solid #5c5be5;
+}
+
