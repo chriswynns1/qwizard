@@ -85,6 +85,7 @@ function SignUp() {
             Sign In with Google
           </button>
     </div>
+    Already have an account? <a href="/signin" className='hover:text-indigo-300 underline cursor-pointer'>Login</a>
         </form>
 </div>
     </div>

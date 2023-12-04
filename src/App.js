@@ -11,6 +11,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import SignUp from "./SignUp";
+import SignIn from "./Login";
+import Login from "./Login";
+import Category from "./Category";
+import CardTest from "./CardTest";
 
 function App() {
   return (
@@ -21,7 +25,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/play" element={<Play />} />
+          <Route path="/play/:categoryId" element={<Play />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/test" element={<CardTest />} />
         </Routes>
       </Router>
       <div>

@@ -1,14 +1,33 @@
-import React from "react";
+// Play.js
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import TriviaCard from './TriviaCard';
 
-function Play() {
-    return (
-    <div className="text-gray-100 pt-20">
-        <div className="text-6xl text-center m-5">Qwizard Trivia</div>
-        <div className="text-3xl text-center text-white border mx-60 p-40 rounded-xl">
-            Trivia goes here
-        </div>
+function Play({ selectedCategory }) {
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        //const response = await axios.get(`https://opentdb.com/api.php?amount=10&category=${selectedCategory.id}&type=multiple`);
+        //setQuestions(response.data.results);
+        console.log("play card:" ,selectedCategory);
+      } catch (error) {
+        console.error('Error fetching trivia questions:', error);
+      }
+    };
+
+    fetchQuestions();
+  }, [selectedCategory]);
+
+  return (
+    <div className="text-gray-100">
+      <h1>Trivia Play Page</h1>
+      {questions.map((question, index) => (
+        <TriviaCard key={index} question={question} />
+      ))}
     </div>
-    )
+  );
 }
 
 export default Play;
