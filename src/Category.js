@@ -74,7 +74,6 @@ function Category() {
     // Reset the selected category when going back
     setSelectedCategory(null);
   };
-  console.log("user: ", user);
   return (
     <div className="text-gray-100 pt-20 pb-20">
       <div className="text-6xl text-center m-5">Qwizard Trivia</div>

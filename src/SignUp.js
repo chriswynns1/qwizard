@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, googleAuthProvider } from "./firebase";
+import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
 
 function SignUp() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -18,8 +20,18 @@ function SignUp() {
         password,
       );
       const user = userCredential.user;
-      console.log("user creds: ", user);
-      navigate("/play");
+      const firestore = getFirestore();
+
+      // ref to the 'users' collection
+      const usersCollectionRef = collection(firestore, "users");
+
+      const usersDocRef = doc(
+        usersCollectionRef,
+        user.uid
+      );
+
+      await setDoc(usersDocRef, {username: username});
+      navigate("/category");
       // Handle successful sign-up (e.g., redirect, update state)
     } catch (error) {
       // Handle sign-up error (e.g., display error message)
@@ -32,9 +44,18 @@ function SignUp() {
       // Sign up with Google using a popup
       const result = await signInWithPopup(auth, googleAuthProvider);
       const user = result.user;
+      const firestore = getFirestore();
 
-      navigate("/play");
-      // Handle successful sign-up (e.g., redirect, update state)
+      // ref to the 'users' collection
+      const usersCollectionRef = collection(firestore, "users");
+
+      const usersDocRef = doc(
+        usersCollectionRef,
+        user.uid
+      );
+
+      await setDoc(usersDocRef, {username: user.displayName});
+      navigate("/category");
     } catch (error) {
       // Handle sign-up error (e.g., display error message)
       console.error("Error signing up with Google:", error.message);
@@ -80,6 +101,21 @@ function SignUp() {
               required
             />
           </div>
+          <div className="mb-6">
+            <label
+              className="block mb-2 text-sm font-medium text-white"
+            >
+              Display name
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username} // Use the value attribute for controlled component
+              onChange={(e) => setUsername(e.target.value)}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required
+            />
+            </div>
           <div className="flex flex-col justify-center">
             <button
               type="submit"
