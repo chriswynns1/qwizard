@@ -1,6 +1,22 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "./firebase";
 
 function Navbar() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  // check if user is authenticated
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    // Cleanup the subscription when the component unmounts
+    return () => unsubscribe();
+  }, []);
+
   // use state to store if menu is open or not
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -9,6 +25,15 @@ function Navbar() {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // handle user auth - if user is logged in, perform logout. if not, redirect to login page
+  const handleAuthAction = () => {
+    if (user) {
+      // If user is logged in, perform logout
+      signOut(auth);
+    } else {
+      navigate('/login');
+    }
+  };
   return (
     <nav class="fixed w-full z-20 top-0 start-0 backdrop-blur-lg border-gray-200">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
@@ -26,9 +51,10 @@ function Navbar() {
           <a href="/login">
             <button
               type="button"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onClick={handleAuthAction}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Login
+              {user ? "Log out" : "Log in"}
             </button>
           </a>
           <button

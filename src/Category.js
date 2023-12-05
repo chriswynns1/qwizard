@@ -74,6 +74,8 @@ function Category() {
     // Reset the selected category when going back
     setSelectedCategory(null);
   };
+
+
   return (
     <div className="text-gray-100 pt-20 pb-20">
       <div className="text-6xl text-center m-5">Qwizard Trivia</div>
@@ -86,7 +88,7 @@ function Category() {
         </div>
       ) : (
         // Display category cards when no category is selected
-        <div>
+        <div className="grid grid-cols-4 mx-40">
           {triviaCategories.map((category) => (
             <TriviaCategoryCard
               key={category.id}
