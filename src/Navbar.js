@@ -92,14 +92,15 @@ function Navbar() {
           id="navbar-sticky"
         >
           <div class="inline-flex rounded-md shadow-sm" role="group">
-            <a href="/">
+            <a href={user ? "/category" : "/"}>
               <button
                 type="button"
-                class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-br from-purple-900 to-indigo-900 border-t border-b border-gray-900 focus:z-10 focus:ring-2 dark:border-white"
+                className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-br from-purple-900 to-indigo-900 border-t border-b border-gray-900 focus:z-10 focus:ring-2 dark:border-white"
               >
-                Home
+                {user ? "Play" : "Home"}
               </button>
             </a>
+
             <a href="/leaderboard">
               <button
                 type="button"

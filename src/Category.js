@@ -75,10 +75,11 @@ function Category() {
     setSelectedCategory(null);
   };
 
-
   return (
-    <div className="text-gray-100 pt-20 pb-20">
-      <div className="text-6xl text-center m-5">Qwizard Trivia</div>
+    <div className="text-gray-100 pt-10 md:pt-20 pb-10 md:pb-20">
+      <div className="text-3xl md:text-6xl text-center m-3 md:m-5">
+        Qwizard Trivia
+      </div>
 
       {selectedCategory ? (
         // Display trivia card when a category is selected
@@ -88,7 +89,7 @@ function Category() {
         </div>
       ) : (
         // Display category cards when no category is selected
-        <div className="grid grid-cols-4 mx-40">
+        <div className="text-xl grid grid-cols-1 md:grid-cols-4 gap-4 md:mx-10 lg:mx-20">
           {triviaCategories.map((category) => (
             <TriviaCategoryCard
               key={category.id}

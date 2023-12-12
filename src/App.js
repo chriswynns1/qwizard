@@ -1,6 +1,7 @@
 import "./Styles.css";
 import Home from "./Home";
 import Leaderboard from "./Leaderboard";
+import Profile from "./Profile";
 import Navbar from "./Navbar";
 import Play from "./Play";
 import Footer from "./Footer";
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/play/:categoryId" element={<Play />} />
           <Route path="/category" element={<Category />} />
           <Route path="/login" element={<Login />} />
