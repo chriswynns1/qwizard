@@ -108,14 +108,16 @@ function Navbar() {
                 Leaderboard
               </button>
             </a>
-            <a href="/profile">
-              <button
-                type="button"
-                class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-br from-purple-900 to-indigo-900 border-t border-b border-gray-900 focus:z-10 focus:ring-2 dark:border-white"
-              >
-                Profile
-              </button>
-            </a>
+            {user && (
+              <a href="/profile">
+                <button
+                  type="button"
+                  class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-br from-purple-900 to-indigo-900 border-t border-b border-gray-900 focus:z-10 focus:ring-2 dark:border-white"
+                >
+                  Profile
+                </button>
+              </a>
+            )}
           </div>
         </div>
       </div>
