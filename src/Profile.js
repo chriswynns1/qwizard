@@ -109,8 +109,12 @@ function Profile() {
       <div className="bigbox">
         <div className="box">
           <div className="text-3xl md:text-5xl text-center m-3 md:m-5 animate-slideup transitioninset-0 ease-in-out delay-150 flex flex-col items-center">
-            <span className="text-white mb-2">{username} Points Total</span>
-            <span className="text-white">{points}</span>
+            <span className="text-white mb-2">Hey {username}!</span>
+
+            <div className="pt-2">
+              <span className="text-2xl text-white">Total points:</span>
+              <span className="text-white">{points}</span>
+            </div>
           </div>
         </div>
         <div className="container">
