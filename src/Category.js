@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";  // Added useParams
+import { useNavigate, useParams } from "react-router-dom"; // Added useParams
 import { auth } from "./firebase";
 import axios from "axios";
 import TriviaCategoryCard from "./TriviaCategoryCard";
 import TriviaCard from "./TriviaCard";
-import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  collection,
+  getDoc,
+} from "firebase/firestore";
 
 function Category() {
   const [user, setUser] = useState(null);
   const [triviaCategories, setTriviaCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
-  const { id } = useParams();  // Extract the category ID from the URL parameters
+  const { id } = useParams(); // Extract the category ID from the URL parameters
 
   useEffect(() => {
     axios
@@ -41,12 +47,15 @@ function Category() {
             `https://opentdb.com/api.php?amount=10&category=${id}&type=multiple`,
           );
           const triviaQuestions = response.data.results;
-  
+
           // Store trivia questions in Firestore
           await storeQuestionsInFirestore(id, triviaQuestions);
-  
+
           // Set the selected category
-          setSelectedCategory({ id: Number(id), name: "Placeholder Category Name" });
+          setSelectedCategory({
+            id: Number(id),
+            name: "Placeholder Category Name",
+          });
         } catch (error) {
           console.error("Error fetching or storing trivia questions:", error);
         }
@@ -87,10 +96,27 @@ function Category() {
         categoriesCollectionRef,
         categoryId.toString(),
       ); // Ensure categoryId is a string
-      console.log("categoryDocRef: ", categoryDocRef);
 
-      // Use setDoc to add or update the document in Firestore
-      await setDoc(categoryDocRef, { questions });
+      // Fetch the existing questions from Firestore
+      const docSnap = await getDoc(categoryDocRef);
+      const existingQuestions = docSnap.exists()
+        ? docSnap.data().questions || []
+        : [];
+
+      // Check if the question already exists in Firestore, if not, add it
+      questions.forEach((newQuestion) => {
+        const questionExists = existingQuestions.some(
+          (existingQuestion) =>
+            existingQuestion.question === newQuestion.question,
+        );
+
+        if (!questionExists) {
+          existingQuestions.push(newQuestion);
+        }
+      });
+
+      // Use setDoc to update the document in Firestore with the merged questions
+      await setDoc(categoryDocRef, { questions: existingQuestions });
     } catch (error) {
       console.error("Error setting trivia questions in Firestore:", error);
     }

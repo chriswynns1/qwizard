@@ -1,5 +1,12 @@
+// Import the 'Fragment' component from React
 import React, { useState, useEffect } from "react";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+} from "firebase/firestore";
 import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -8,78 +15,77 @@ const TriviaCard = ({ category }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [user, setUser] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
-  console.log("category:", category);
+  const [score, setScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      console.log("user: ", user.uid);
     });
 
-    // Clean up the subscription when the component unmounts
     return () => unsubscribe();
-  }, []); // Run the effect once on component mount
+  }, []);
+
+  const fetchQuestions = async () => {
+    try {
+      const firestore = getFirestore();
+      const categoryDocRef = doc(
+        firestore,
+        "categories",
+        category.id.toString(),
+      );
+      const docSnap = await getDoc(categoryDocRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setQuestions(data.questions || []);
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching trivia questions:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const firestore = getFirestore();
-        const categoryDocRef = doc(
-          firestore,
-          "categories",
-          category.id.toString(),
-        );
-        const docSnap = await getDoc(categoryDocRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setQuestions(data.questions || []);
-        } else {
-          console.log("No such document!");
-        }
-      } catch (error) {
-        console.error("Error fetching trivia questions:", error);
-      }
-    };
-
     fetchQuestions();
   }, [category]);
 
-  // grab next question after the user answers one
   const fetchNextQuestion = () => {
     setQuestions((prevQuestions) => prevQuestions.slice(1));
   };
 
   const handleAnswerClick = async (answer) => {
+    if (gameOver) {
+      return;
+    }
+
     if (isCorrect !== null) {
-      // If the user has already answered, do nothing
       return;
     }
 
     setSelectedAnswer(answer);
-
-    // Check if the selected answer is correct
     const correctAnswer = questions[0].correct_answer;
     const userAnsweredCorrectly = answer === correctAnswer;
 
-    setIsCorrect(userAnsweredCorrectly); // Set feedback state
+    setIsCorrect(userAnsweredCorrectly);
 
-    // Update Firestore database if the answer is correct
     if (userAnsweredCorrectly) {
+      setScore((prevScore) => prevScore + 1);
+
       try {
         const firestore = getFirestore();
-        const userDocRef = doc(firestore, "users", user.uid); // Replace with actual user ID
+        const userDocRef = doc(firestore, "users", user.uid);
 
-        // Fetch the current user data
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
-
-          // Update the user's points (add 10 points for a correct answer)
           const updatedPoints = (userData.points || 0) + 10;
 
-          // Update the user document in Firestore
           await setDoc(userDocRef, { points: updatedPoints }, { merge: true });
         } else {
           console.log("User document does not exist!");
@@ -89,24 +95,51 @@ const TriviaCard = ({ category }) => {
       }
     }
 
-    // Move to the next question after a delay (you can adjust the delay as needed)
     setTimeout(() => {
       setSelectedAnswer(null);
       setIsCorrect(null);
       fetchNextQuestion();
-      // Fetch and set the next question
-      // You can use the same logic as in your current useEffect to fetch questions
+
+      if (questions.length === 1) {
+        setGameOver(true);
+        fetchQuestions(); // Fetch new questions after the game is over
+      }
     }, 1500);
   };
 
-  // Add a check to ensure that the question prop is defined
-  if (!questions.length) {
-    return <div>Loading...</div>; // or you can render a loading message or some fallback content
+  const handlePlayAgain = () => {
+    setScore(0);
+    setGameOver(false);
+    fetchQuestions();
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
+
+  if (gameOver) {
+    return (
+      <div className="p-4 border rounded-md shadow-lg text-center">
+        <h3>Quiz Over!</h3>
+        <p>
+          Your Score: {score}/{questions.length}
+        </p>
+        <button
+          className="mt-4 py-2 px-4 bg-blue-500 text-white rounded-md"
+          onClick={handlePlayAgain}
+        >
+          Play Again
+        </button>
+      </div>
+    );
+  }
+
+  // Use dangerouslySetInnerHTML to render HTML entities as HTML tags
+  const questionText = { __html: questions[0].question };
 
   return (
     <div className="p-4 border rounded-md shadow-lg">
-      <h3 className="text-center">{questions[0].question}</h3>
+      <h3 className="text-center" dangerouslySetInnerHTML={questionText}></h3>
       <div className="flex justify-center space-x-4">
         {[...questions[0].incorrect_answers, questions[0].correct_answer].map(
           (answer, index) => (
@@ -120,6 +153,15 @@ const TriviaCard = ({ category }) => {
               {answer}
             </button>
           ),
+        )}
+        {isCorrect !== null && (
+          <p
+            className={`text-center mt-4 text-${
+              isCorrect ? "green" : "red"
+            }-500 font-bold`}
+          >
+            {isCorrect ? "Correct!" : "Incorrect!"}
+          </p>
         )}
       </div>
     </div>
