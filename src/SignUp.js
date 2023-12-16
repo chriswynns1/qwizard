@@ -20,17 +20,15 @@ function SignUp() {
         password,
       );
       const user = userCredential.user;
+      console.log("user: ", user.uid);
       const firestore = getFirestore();
 
       // ref to the 'users' collection
       const usersCollectionRef = collection(firestore, "users");
 
-      const usersDocRef = doc(
-        usersCollectionRef,
-        user.uid
-      );
+      const usersDocRef = doc(usersCollectionRef, user.uid);
 
-      await setDoc(usersDocRef, {username: username});
+      await setDoc(usersDocRef, { username: username });
       navigate("/category");
       // Handle successful sign-up (e.g., redirect, update state)
     } catch (error) {
@@ -49,12 +47,9 @@ function SignUp() {
       // ref to the 'users' collection
       const usersCollectionRef = collection(firestore, "users");
 
-      const usersDocRef = doc(
-        usersCollectionRef,
-        user.uid
-      );
+      const usersDocRef = doc(usersCollectionRef, user.uid);
 
-      await setDoc(usersDocRef, {username: user.displayName});
+      await setDoc(usersDocRef, { username: user.displayName });
       navigate("/category");
     } catch (error) {
       // Handle sign-up error (e.g., display error message)
@@ -102,9 +97,7 @@ function SignUp() {
             />
           </div>
           <div className="mb-6">
-            <label
-              className="block mb-2 text-sm font-medium text-white"
-            >
+            <label className="block mb-2 text-sm font-medium text-white">
               Display name
             </label>
             <input
@@ -115,7 +108,7 @@ function SignUp() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required
             />
-            </div>
+          </div>
           <div className="flex flex-col justify-center">
             <button
               type="submit"

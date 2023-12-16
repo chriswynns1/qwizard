@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";  // Added useParams
 import { auth } from "./firebase";
 import axios from "axios";
 import TriviaCategoryCard from "./TriviaCategoryCard";
@@ -11,6 +11,7 @@ function Category() {
   const [triviaCategories, setTriviaCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
+  const { id } = useParams();  // Extract the category ID from the URL parameters
 
   useEffect(() => {
     axios
@@ -31,6 +32,30 @@ function Category() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    // Use the extracted ID to fetch questions for the specific category
+    const fetchCategoryQuestions = async () => {
+      if (id) {
+        try {
+          const response = await axios.get(
+            `https://opentdb.com/api.php?amount=10&category=${id}&type=multiple`,
+          );
+          const triviaQuestions = response.data.results;
+  
+          // Store trivia questions in Firestore
+          await storeQuestionsInFirestore(id, triviaQuestions);
+  
+          // Set the selected category
+          setSelectedCategory({ id: Number(id), name: "Placeholder Category Name" });
+        } catch (error) {
+          console.error("Error fetching or storing trivia questions:", error);
+        }
+      }
+    };
+
+    fetchCategoryQuestions();
+  }, [id]);
+
   const handleCategoryClick = async (category) => {
     try {
       // Fetch trivia questions from the API
@@ -44,6 +69,7 @@ function Category() {
 
       // Set the selected category and navigate to trivia card
       setSelectedCategory(category);
+      console.log("selected category: ", selectedCategory);
     } catch (error) {
       console.error("Error fetching or storing trivia questions:", error);
     }
@@ -83,7 +109,7 @@ function Category() {
 
       {selectedCategory ? (
         // Display trivia card when a category is selected
-        <div>
+        <div className="mx-20">
           <TriviaCard category={selectedCategory} />
           <button onClick={handleBackToCategories}>Back to Categories</button>
         </div>

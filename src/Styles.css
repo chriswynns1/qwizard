@@ -295,12 +295,6 @@ button span {
 
 /*------------------------------ Profile styles -----------------------------*/
 
-.container {
-  padding-top: 90px;
-  width: 500px;
-  margin-left: 5rem;
-}
-
 .progress {
   padding: 6px;
   background: rgba(0, 0, 0, 0.25);
@@ -327,15 +321,6 @@ button span {
   }
 }
 
-.progress2 {
-  padding: 6px;
-  border-radius: 30px;
-  background: rgba(0, 0, 0, 0.25);
-  box-shadow:
-    inset 0 1px 2px rgba(0, 0, 0, 0.25),
-    0 1px rgba(255, 255, 255, 0.08);
-}
-
 .progress-bar2 {
   height: 18px;
   border-radius: 30px;
@@ -354,13 +339,61 @@ button span {
   animation: progressAnimation 6s;
 }
 
-@keyframes progressAnimation {
-  0% {
-    width: 5%;
-    background-color: #61b6f3;
-  }
-  100% {
-    width: 85%;
-    background-color: #3784db;
-  }
+.bigbox {
+  align-items: center;
+  padding-top: 100px;
+}
+
+.biggerbox {
+  display: flex;
+  justify-content: center;
+}
+
+.box {
+  background: rgba(217, 214, 228, 0.12); /* Background for the box */
+  text-align: center;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 40px;
+  margin-right: 4%;
+  width: 100%;
+}
+
+.container {
+  background: rgba(217, 214, 228, 0.12); /* Background for the container */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  margin-top: 8%;
+}
+
+.progress2 {
+  width: 25vw; /* Set the width to 25% of the viewport width */
+  margin-top: 20px; /* Add some margin to separate from the text above */
+  padding: 6px;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.25),
+    0 1px rgba(255, 255, 255, 0.08);
+  padding: 6px;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.25),
+    0 1px rgba(255, 255, 255, 0.08);
+}
+
+.favorites {
+  background: rgba(217, 214, 228, 0.12); /* Background for the container */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  width: 30%;
+  margin-top: 140px;
+  margin-left: 4%;
 }
