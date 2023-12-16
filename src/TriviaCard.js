@@ -136,24 +136,27 @@ const TriviaCard = ({ category }) => {
 
   // Use dangerouslySetInnerHTML to render HTML entities as HTML tags
   const questionText = { __html: questions[0].question };
+  const answerButtons = [
+    ...questions[0].incorrect_answers,
+    questions[0].correct_answer,
+  ].map((answer, index) => (
+    <button
+      key={index}
+      className={`py-2 px-4 bg-blue-500 text-white rounded-md ${
+        selectedAnswer === answer ? "bg-blue-700" : ""
+      }`}
+      onClick={() => handleAnswerClick(answer)}
+    >
+      {/* Use dangerouslySetInnerHTML to render HTML entities as HTML tags */}
+      <span dangerouslySetInnerHTML={{ __html: answer }} />
+    </button>
+  ));
 
   return (
     <div className="p-4 border rounded-md shadow-lg">
       <h3 className="text-center" dangerouslySetInnerHTML={questionText}></h3>
       <div className="flex justify-center space-x-4">
-        {[...questions[0].incorrect_answers, questions[0].correct_answer].map(
-          (answer, index) => (
-            <button
-              key={index}
-              className={`py-2 px-4 bg-blue-500 text-white rounded-md ${
-                selectedAnswer === answer ? "bg-blue-700" : ""
-              }`}
-              onClick={() => handleAnswerClick(answer)}
-            >
-              {answer}
-            </button>
-          ),
-        )}
+        {answerButtons}
         {isCorrect !== null && (
           <p
             className={`text-center mt-4 text-${
