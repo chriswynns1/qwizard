@@ -5,7 +5,7 @@ import {
   query,
   orderBy,
   getDocs,
-  limit, // Add this line to import the limit function
+  limit, 
 } from "firebase/firestore";
 import { auth } from "./firebase";
 
@@ -20,7 +20,7 @@ function Leaderboard() {
         const leaderboardQuery = query(
           leaderboardCollection,
           orderBy("points", "desc"),
-          limit(5), // Add the limit function here
+          limit(5), 
         );
         const leaderboardSnapshot = await getDocs(leaderboardQuery);
 
@@ -41,8 +41,8 @@ function Leaderboard() {
       }
     };
 
-    fetchLeaderboardData(); // Call the function to fetch leaderboard data
-  }, []); // Empty dependency array to run the effect only once on mount
+    fetchLeaderboardData();
+  }, []); 
 
   return (
     <div class="leaderboard-container">

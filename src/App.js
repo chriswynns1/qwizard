@@ -9,7 +9,6 @@ import Footer from "./Footer";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import Category from "./Category";
-import CardTest from "./CardTest";
 
 const App = () => {
   return (
@@ -24,7 +23,6 @@ const App = () => {
           <Route path="/play/:categoryId" element={<Play />} />
           <Route path="/category" element={<Category />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/test" element={<CardTest />} />
           <Route path="/category/:id" element={<Category />} />
         </Routes>
       </Router>

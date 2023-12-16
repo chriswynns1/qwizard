@@ -17,7 +17,7 @@ function Category() {
   const [triviaCategories, setTriviaCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
-  const { id } = useParams(); // Extract the category ID from the URL parameters
+  const { id } = useParams(); 
 
   useEffect(() => {
     axios
@@ -88,10 +88,10 @@ function Category() {
     try {
       const firestore = getFirestore();
 
-      // Reference to the 'categories' collection
+      // ref to the 'categories' collection
       const categoriesCollectionRef = collection(firestore, "categories");
 
-      // Reference to the document with categoryId in the 'categories' collection
+      // ref to document with categoryId in the 'categories' collection
       const categoryDocRef = doc(
         categoriesCollectionRef,
         categoryId.toString(),

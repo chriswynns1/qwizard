@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import TriviaCategoryCard2 from "./TriviaCategoryCard2";
+import TriviaCategoryCard from "./TriviaCategoryCard";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   getFirestore,
@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { auth } from "./firebase";
 
+// maps an id to each category
 const categoryData = [
   { id: 9, name: "General Knowledge" },
   { id: 10, name: "Entertainment: Books" },
@@ -45,7 +46,7 @@ function Profile() {
   const [userFavorites, setUserFavorites] = useState([]);
   const [user, setUser] = useState(null);
   const [points, setPoints] = useState(null);
-  const [highscore, setHighscore] = useState(null); // Updated state name
+  const [highscore, setHighscore] = useState(null);
   const [username, setUsername] = useState(null);
 
   useEffect(() => {
@@ -61,10 +62,11 @@ function Profile() {
         );
         const leaderboardSnapshot = await getDocs(leaderboardQuery);
 
-        // Retrieve highscore from the leaderboardSnapshot
+        // fetch highscore from the leaderboardSnapshot
         const highscoreData = leaderboardSnapshot.docs[0]?.data();
         const highscoreValue = highscoreData?.points || 0;
-        setHighscore(highscoreValue); // Set the highscore state
+        // set the highscore state
+        setHighscore(highscoreValue); 
 
         if (user) {
           const uid = user.uid;
@@ -91,11 +93,11 @@ function Profile() {
     return () => unsubscribe(); // Cleanup on unmount
   }, []);
 
-  // Calculate the percentage based on the current points and the highscore
+  // calculate the percentage based on the current points and the highscore
   const calculatePercentage = () => {
     if (points === null || highscore === null) return 0;
     const percentage = (points / highscore) * 100;
-    return percentage > 100 ? 100 : percentage; // Ensure the percentage doesn't exceed 100%
+    return percentage > 100 ? 100 : percentage; // ensure the percentage doesn't exceed 100%
   };
 
   const progressPercentage = calculatePercentage();
@@ -144,7 +146,7 @@ function Profile() {
         <div className="category-links">
           {filteredCategories.map((category) => (
             <Link key={category.id} to={`/category/${category.id}`}>
-              <TriviaCategoryCard2 category={category} onClick={() => {}} />
+              <TriviaCategoryCard category={category} onClick={() => {}} />
             </Link>
           ))}
         </div>
