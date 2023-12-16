@@ -16,8 +16,8 @@ function Home() {
           Become the next Qwizard champion!
         </div>
         <div className="text-center text-1xl pt-4">
-          Log in and play now or sign up for an account to save settings and
-          high scores.
+          Log in and play now or sign up for an account to save your high
+          scores.
         </div>
         <div className="text-center pt-4">
           <a
@@ -37,7 +37,6 @@ function Home() {
             </span>
           </a>
         </div>
-        <div className="text-center p-4">leaderboard goes here</div>
       </div>
     </div>
   );

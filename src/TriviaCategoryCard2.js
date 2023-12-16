@@ -6,7 +6,7 @@ import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
-function TriviaCategoryCard2({ category, onClick }) {
+function TriviaCategoryCard2({ category, onClick, removeFromFavorites }) {
   const [userFavorites, setUserFavorites] = useState([]);
 
   useEffect(() => {
@@ -106,6 +106,8 @@ function TriviaCategoryCard2({ category, onClick }) {
       } else {
         console.log("User not logged in.");
       }
+      // Move this line outside the try-catch block
+      removeFromFavorites(category.id);
     } catch (error) {
       console.error("Error updating category favorited status:", error);
     }

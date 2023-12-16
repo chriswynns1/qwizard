@@ -1,7 +1,49 @@
-import React from "react";
-import "./Styles.css";
+import React, { useEffect, useState } from "react";
+import {
+  getFirestore,
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  limit, // Add this line to import the limit function
+} from "firebase/firestore";
+import { auth } from "./firebase";
 
 function Leaderboard() {
+  const [leaderboardData, setLeaderboardData] = useState([]);
+
+  useEffect(() => {
+    const fetchLeaderboardData = async () => {
+      try {
+        const firestore = getFirestore();
+        const leaderboardCollection = collection(firestore, "users");
+        const leaderboardQuery = query(
+          leaderboardCollection,
+          orderBy("points", "desc"),
+          limit(5), // Add the limit function here
+        );
+        const leaderboardSnapshot = await getDocs(leaderboardQuery);
+
+        const leaderboardDataArray = [];
+
+        leaderboardSnapshot.forEach((doc) => {
+          const userData = doc.data();
+          leaderboardDataArray.push({
+            username: userData.username,
+            points: userData.points || 0,
+          });
+        });
+
+        setLeaderboardData(leaderboardDataArray);
+        console.log("leaderboard data:", leaderboardData);
+      } catch (error) {
+        console.error("Error fetching leaderboard data:", error);
+      }
+    };
+
+    fetchLeaderboardData(); // Call the function to fetch leaderboard data
+  }, []); // Empty dependency array to run the effect only once on mount
+
   return (
     <div class="leaderboard-container">
       <head>
@@ -17,56 +59,52 @@ function Leaderboard() {
       </head>
       <div>
         <body>
-          <div class="main">
-            <div id="header">
-              <h1>Ranking</h1>
-              {/*<button class="share">   -------------------MAYBE WE DO DIS LATER
-          <i class="ph ph-share-network"></i>
-        </button>*/}
-            </div>
-            <div id="leaderboard">
-              <div class="ribbon"></div>
-              <table>
-                <tr>
-                  <td class="number">1</td>
-                  <td class="name">NAME 1</td>
-                  <td class="points">
-                    0{" "}
-                    <img
-                      class="gold-medal"
-                      src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true"
-                      alt="gold medal"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="number">2</td>
-                  <td class="name">NAME 2</td>
-                  <td class="points">0</td>
-                </tr>
-                <tr>
-                  <td class="number">3</td>
-                  <td class="name">NAME 3</td>
-                  <td class="points">0</td>
-                </tr>
-                <tr>
-                  <td class="number">4</td>
-                  <td class="name">NAME 4</td>
-                  <td class="points">0</td>
-                </tr>
-                <tr>
-                  <td class="number">5</td>
-                  <td class="name">NAME 5</td>
-                  <td class="points">0</td>
-                </tr>
-              </table>
-              <div id="buttons">
-                <a href="/">
-                  <button class="leaderboardbuttons">Exit</button>
-                </a>
-                <a href="/">
-                  <button class="leaderboardbuttons">Continue</button>
-                </a>
+          <div className="leaderboard-container">
+            <div className="main">
+              <div id="header">
+                <h1>Ranking</h1>
+              </div>
+              <div id="leaderboard">
+                <div className="ribbon"></div>
+                <table>
+                  <tr>
+                    <td className="number">1</td>
+                    <td className="name">{leaderboardData[0]?.username}</td>
+                    <td className="points">
+                      {leaderboardData[0]?.points}{" "}
+                      <img
+                        className="gold-medal"
+                        src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true"
+                        alt="gold medal"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="number">2</td>
+                    <td className="name">{leaderboardData[1]?.username}</td>
+                    <td className="points">{leaderboardData[1]?.points}</td>
+                  </tr>
+                  <tr>
+                    <td className="number">3</td>
+                    <td className="name">{leaderboardData[2]?.username}</td>
+                    <td className="points">{leaderboardData[2]?.points}</td>
+                  </tr>
+                  <tr>
+                    <td className="number">4</td>
+                    <td className="name">{leaderboardData[3]?.username}</td>
+                    <td className="points">{leaderboardData[3]?.points}</td>
+                  </tr>
+                  <tr>
+                    <td className="number">5</td>
+                    <td className="name">{leaderboardData[4]?.username}</td>
+                    <td className="points">{leaderboardData[4]?.points}</td>
+                  </tr>
+                </table>
+                <div id="buttons">
+                  <a href="/category">
+                    <button className="leaderboardbuttons">Exit</button>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

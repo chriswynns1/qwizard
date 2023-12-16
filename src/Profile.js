@@ -2,7 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TriviaCategoryCard2 from "./TriviaCategoryCard2";
 import { onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  limit,
+} from "firebase/firestore";
 import { auth } from "./firebase";
 
 const categoryData = [
@@ -36,12 +45,26 @@ function Profile() {
   const [userFavorites, setUserFavorites] = useState([]);
   const [user, setUser] = useState(null);
   const [points, setPoints] = useState(null);
+  const [highscore, setHighscore] = useState(null); // Updated state name
   const [username, setUsername] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const user = auth.currentUser;
+        const firestore = getFirestore();
+        const leaderboardCollection = collection(firestore, "users");
+        const leaderboardQuery = query(
+          leaderboardCollection,
+          orderBy("points", "desc"),
+          limit(1),
+        );
+        const leaderboardSnapshot = await getDocs(leaderboardQuery);
+
+        // Retrieve highscore from the leaderboardSnapshot
+        const highscoreData = leaderboardSnapshot.docs[0]?.data();
+        const highscoreValue = highscoreData?.points || 0;
+        setHighscore(highscoreValue); // Set the highscore state
 
         if (user) {
           const uid = user.uid;
@@ -68,11 +91,10 @@ function Profile() {
     return () => unsubscribe(); // Cleanup on unmount
   }, []);
 
-  // Calculate the percentage based on the current points and the nearest thousand
+  // Calculate the percentage based on the current points and the highscore
   const calculatePercentage = () => {
-    if (points === null) return 0; // Return 0 if points are not available yet
-    const nearestThousand = Math.ceil(points / 1000) * 1000;
-    const percentage = (points / nearestThousand) * 100;
+    if (points === null || highscore === null) return 0;
+    const percentage = (points / highscore) * 100;
     return percentage > 100 ? 100 : percentage; // Ensure the percentage doesn't exceed 100%
   };
 
@@ -104,6 +126,11 @@ function Profile() {
               }}
             ></div>
           </div>
+          {progressPercentage === 100 && (
+            <div className="text-3xl md:text-5xl text-center m-3 md:m-5 animate-slideup transitioninset-0 ease-in-out delay-150 flex flex-col items-center">
+              <span className="text-yellow-500">Ranked Number 1</span>
+            </div>
+          )}
         </div>
       </div>
       <div className="favorites">
