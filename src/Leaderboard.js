@@ -5,13 +5,13 @@ import {
   query,
   orderBy,
   getDocs,
-  limit, 
+  limit,
 } from "firebase/firestore";
 import { auth } from "./firebase";
 
 function Leaderboard() {
   const [leaderboardData, setLeaderboardData] = useState([]);
-
+  //gets top 5 leaderboard data
   useEffect(() => {
     const fetchLeaderboardData = async () => {
       try {
@@ -20,7 +20,7 @@ function Leaderboard() {
         const leaderboardQuery = query(
           leaderboardCollection,
           orderBy("points", "desc"),
-          limit(5), 
+          limit(5),
         );
         const leaderboardSnapshot = await getDocs(leaderboardQuery);
 
@@ -42,7 +42,7 @@ function Leaderboard() {
     };
 
     fetchLeaderboardData();
-  }, []); 
+  }, []);
 
   return (
     <div class="leaderboard-container">

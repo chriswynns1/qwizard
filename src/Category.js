@@ -13,11 +13,12 @@ import {
 } from "firebase/firestore";
 
 function Category() {
+  // Example of State Management
   const [user, setUser] = useState(null);
   const [triviaCategories, setTriviaCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
-  const { id } = useParams(); 
+  const { id } = useParams();
 
   useEffect(() => {
     axios
@@ -128,7 +129,7 @@ function Category() {
   };
 
   return (
-    <div className="text-gray-100 pt-10 md:pt-20 pb-10 md:pb-20">
+    <div className="text-gray-100 pt-20 md:pt-20 pb-10 md:pb-20">
       <div className="text-3xl md:text-6xl text-center m-3 md:m-5">
         Qwizard Trivia
       </div>

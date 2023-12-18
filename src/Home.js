@@ -13,6 +13,7 @@ function Home() {
     });
     return () => unsubscribe();
   }, []);
+
   return (
     <div>
       <div className="text-gray-100 pt-20">
